@@ -1,0 +1,24 @@
+{
+  "name": "wx-config-client",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack",
+    "watch": "npm run build  -- -w"
+  },
+  "author": "Raffaele Canale",
+  "devDependencies": {
+    "babel-core": "^6.9.1",
+    "babel-loader": "^6.2.4",
+    "babel-preset-es2015": "^6.9.0",
+    "text-loader": "0.0.1",
+    "webpack": "^1.13.1"
+  },
+  "dependencies": {
+    "axios": "^0.17.1",
+    "joi": "^13.1.2",
+    "lodash": "^4.17.5",
+    "yargs": "^11.0.0"
+  }
+}
