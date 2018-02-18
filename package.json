@@ -2,7 +2,7 @@
   "name": "wx-config-client",
   "version": "0.0.1",
   "description": "",
-  "main": "dist/bunlde.js",
+  "main": "dist/bundle.js",
   "scripts": {
     "start": "node dist/bundle.js",
     "build": "webpack",

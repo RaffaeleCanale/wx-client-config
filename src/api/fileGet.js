@@ -21,11 +21,17 @@ export default class FileGet {
             headers: getHeaders(config),
             transformResponse: _.identity(),
         });
+        this.env = config.environment;
     }
 
     get(fileConfig) {
-        return this.instance.get(`/${fileConfig.name}`)
+        return this.instance.get(this._url(fileConfig))
             .then((response) => writeArray(fileConfig.output, [response.data]))
+    }
+
+    _url(fileConfig) {
+        return this.env ? `/${this.env}/${fileConfig.name}` :
+                        `/${fileConfig.name}`
     }
 
 }

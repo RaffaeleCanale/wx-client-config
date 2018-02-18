@@ -11,9 +11,10 @@ const files = Joi.array().items(
 
 const schema = Joi.object().keys({
     hostname: Joi.string().required(),
+    environment: Joi.string().optional(),
     token: Joi.string().base64({ paddingRequired: false }).optional(),
     files,
-})
+}).unknown()
 
 
 
