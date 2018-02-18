@@ -1,4 +1,5 @@
 import Joi from 'joi';
+import _ from 'lodash';
 import { readJson } from 'util/fileUtils';
 
 const files = Joi.array().items(
@@ -16,7 +17,7 @@ const schema = Joi.object().keys({
 
 
 
-export function readConfig(filename) {
+export function readConfig(filename, defaults) {
     return readJson(filename)
-        .then((config) => Joi.validate(config, schema))
+        .then((config) => Joi.validate(_.defaults(config, defaults), schema))
 }

@@ -1,9 +1,0 @@
-{
-    "hostname": "http://localhost:4567",
-    "files": [
-        {
-            "name": "home/test.json",
-            "output": "test.json"
-        }
-    ]
-}

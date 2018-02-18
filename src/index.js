@@ -1,14 +1,16 @@
-import _ from 'lodash';
 import Joi from 'joi';
 import { argv } from 'yargs';
+import PrettyError from 'pretty-error';
 import { readConfig } from 'config/configReader';
 import FileGet from 'api/fileGet';
+import GlobalConfig from 'globalConfig';
+
+const pe = new PrettyError().start();
 
 
 const argsSchema = Joi.object().keys({
     config: Joi.string().default('.wxrc'),
 }).unknown();
-
 
 const result = Joi.validate(argv, argsSchema)
 if (result.error !== null) {
@@ -16,8 +18,11 @@ if (result.error !== null) {
 }
 const params = result.value;
 
-readConfig(params.config)
+readConfig(params.config, GlobalConfig)
     .then((config) => {
         const service = new FileGet(config)
         return Promise.all(config.files.map((file) => service.get(file)))
-    }).catch(console.error)
+    })
+    .catch((err) => {
+        console.error(pe.render(err));
+    });
