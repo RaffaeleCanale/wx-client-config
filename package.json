@@ -1,27 +1,29 @@
 {
-  "name": "wx-config-client",
-  "version": "0.0.1",
-  "description": "",
-  "main": "dist/bundle.js",
-  "scripts": {
-    "start": "node dist/bundle.js",
-    "build": "webpack",
-    "watch": "npm run build  -- -w"
-  },
-  "author": "Raffaele Canale",
-  "devDependencies": {
-    "babel-core": "^6.9.1",
-    "babel-loader": "^6.2.4",
-    "babel-preset-es2015": "^6.9.0",
-    "json-loader": "^0.5.7",
-    "text-loader": "0.0.1",
-    "webpack": "^1.13.1"
-  },
-  "dependencies": {
-    "axios": "^0.17.1",
-    "joi": "^13.1.2",
-    "lodash": "^4.17.5",
-    "pretty-error": "^2.1.1",
-    "yargs": "^11.0.0"
-  }
+    "name": "wx-client-config",
+    "version": "0.0.1",
+    "description": "Client that fetches config file(s) for a given project",
+    "repository": "github:RaffaeleCanale/wx-client-config",
+    "license": "MIT",
+    "main": "dist/bundle.js",
+    "scripts": {
+        "start": "node dist/bundle.js",
+        "build": "webpack",
+        "watch": "npm run build  -- -w"
+    },
+    "author": "Raffaele Canale",
+    "devDependencies": {
+        "babel-core": "^6.9.1",
+        "babel-loader": "^6.2.4",
+        "babel-preset-es2015": "^6.9.0",
+        "json-loader": "^0.5.7",
+        "text-loader": "0.0.1",
+        "webpack": "^1.13.1"
+    },
+    "dependencies": {
+        "axios": "^0.17.1",
+        "joi": "^13.1.2",
+        "lodash": "^4.17.5",
+        "pretty-error": "^2.1.1",
+        "yargs": "^11.0.0"
+    }
 }
