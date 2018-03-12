@@ -23,7 +23,7 @@
         "axios": "^0.17.1",
         "joi": "^13.1.2",
         "lodash": "^4.17.5",
-        "pretty-error": "^2.1.1",
+        "js-utils": "git://github.com/RaffaeleCanale/js-utils.git",
         "yargs": "^11.0.0"
     }
 }

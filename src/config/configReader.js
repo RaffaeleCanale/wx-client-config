@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import _ from 'lodash';
-import { readJson } from 'util/fileUtils';
+import { readJson } from 'js-utils/file-utils';
 
 const files = Joi.array().items(
     Joi.object().keys({

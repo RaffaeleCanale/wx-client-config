@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import axios from 'axios';
-import { writeArray } from 'util/fileUtils'
+import { writeArray } from 'js-utils/file-utils'
+import { getLogger } from 'js-utils/logger';
 
 function getHeaders(config) {
     const headers = {};
@@ -22,9 +23,11 @@ export default class FileGet {
             transformResponse: _.identity(),
         });
         this.env = config.environment;
+        this.logger = getLogger(`${this.env}@${config.hostname}`);
     }
 
     get(fileConfig) {
+        this.logger.info('GET', fileConfig)
         return this.instance.get(this._url(fileConfig))
             .then((response) => writeArray(fileConfig.output, [response.data]))
     }

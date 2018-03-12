@@ -1,11 +1,9 @@
 import Joi from 'joi';
 import { argv } from 'yargs';
-import PrettyError from 'pretty-error';
 import { readConfig } from 'config/configReader';
 import FileGet from 'api/fileGet';
 import GlobalConfig from 'globalConfig';
-
-const pe = new PrettyError().start();
+import Logger from 'js-utils/logger';
 
 
 const argsSchema = Joi.object().keys({
@@ -23,6 +21,4 @@ readConfig(params.config, GlobalConfig)
         const service = new FileGet(config)
         return Promise.all(config.files.map((file) => service.get(file)))
     })
-    .catch((err) => {
-        console.error(pe.render(err));
-    });
+    .catch(Logger.error);
