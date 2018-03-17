@@ -18,7 +18,7 @@ export default class FileGet {
     constructor(config) {
         this.instance = axios.create({
             baseURL: config.hostname,
-            timeout: 1000,
+            timeout: _.get(config, 'timeout', 1000),
             headers: getHeaders(config),
             transformResponse: _.identity(),
         });

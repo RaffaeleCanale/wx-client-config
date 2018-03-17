@@ -13,6 +13,7 @@ const schema = Joi.object().keys({
     hostname: Joi.string().required(),
     environment: Joi.string().optional(),
     token: Joi.string().base64({ paddingRequired: false }).optional(),
+    timeout: Joi.number().optional(),
     files,
 }).unknown()
 
