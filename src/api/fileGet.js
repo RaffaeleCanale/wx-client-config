@@ -37,12 +37,13 @@ export default class FileGet {
         this.logger = getLogger(`${config.hostname}`);
     }
 
-    get(file, path) {
+    get(item) {
+        const { file, project, output } = item;
         const url = '/api/config';
-        const params = { file, path };
+        const params = { file, path: project };
         this.logger.info('GET', url, params);
         return this.instance.get(url, { params })
-            .then((response) => writeArray(file, [response.data]));
+            .then((response) => writeArray(output, [response.data]));
     }
 
     requestToken(domains) {

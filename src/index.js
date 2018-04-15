@@ -20,7 +20,7 @@ if (result.error !== null) {
     throw Error(result.error);
 }
 const params = result.value;
-readConfig(params.config, GlobalConfig)
+readConfig(params.config, GlobalConfig, params.project)
     .then((config) => {
         const service = new FileGet(config);
         if (params.token) {
@@ -29,7 +29,7 @@ readConfig(params.config, GlobalConfig)
                     Logger.info('Token:', token);
                 });
         } else {
-            return Promise.all(config.config.map((file) => service.get(file, params.project)))
+            return Promise.all(config.config.map((file) => service.get(file)))
         }
     })
     .catch((err) => {
