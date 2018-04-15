@@ -1,5 +1,8 @@
 import _ from 'lodash';
 import axios from 'axios';
+import path from 'path';
+import bcrypt from 'bcrypt';
+import read from 'read';
 import { writeArray } from 'js-utils/file-utils'
 import { getLogger } from 'js-utils/logger';
 
@@ -13,6 +16,15 @@ function getHeaders(config) {
     return headers;
 }
 
+function inputPassword() {
+    return new Promise((resolve, reject) => {
+        read({ prompt: 'Input password: ', silent: true }, (err, password) => {
+            if (err) return reject(err);
+            return resolve(password);
+        });
+    });
+}
+
 export default class FileGet {
 
     constructor(config) {
@@ -22,19 +34,31 @@ export default class FileGet {
             headers: getHeaders(config),
             transformResponse: _.identity(),
         });
-        this.env = config.environment;
-        this.logger = getLogger(`${this.env}@${config.hostname}`);
+        this.logger = getLogger(`${config.hostname}`);
     }
 
-    get(fileConfig) {
-        this.logger.info('GET', fileConfig)
-        return this.instance.get(this._url(fileConfig))
-            .then((response) => writeArray(fileConfig.output, [response.data]))
+    get(file) {
+        const url = '/api/config';
+        const params = {
+            file,
+            path: path.basename(process.cwd()),
+        }
+        this.logger.info('GET', url, params);
+        return this.instance.get(url, { params })
+            .then((response) => writeArray(file, [response.data]));
     }
 
-    _url(fileConfig) {
-        return this.env ? `/${this.env}/${fileConfig.name}` :
-                        `/${fileConfig.name}`
+    requestToken(domains) {
+        return inputPassword()
+            .then(password => {
+                return bcrypt.hash(password, 10);
+            })
+            .then((hash) => {
+                const url = '/api/login/token';
+                const data = { domains, hash };
+                this.logger.info('POST', url, data);
+                return this.instance.post(url, data).then(response => JSON.parse(response.data));
+            });
     }
 
 }
