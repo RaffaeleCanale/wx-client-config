@@ -1,5 +1,6 @@
 import Joi from 'joi';
 import yargs from 'yargs';
+import path from 'path';
 import { readConfig } from 'config/configReader';
 import FileGet from 'api/fileGet';
 import GlobalConfig from 'globalConfig';
@@ -8,6 +9,7 @@ import Logger from 'js-utils/logger';
 
 const argv = yargs.array('token').argv;
 const argsSchema = Joi.object().keys({
+    project: Joi.string().default(path.basename(process.cwd())),
     config: Joi.string().default('.wxrc'),
     token: Joi.array().items(Joi.string()).optional(),
 }).unknown();
@@ -27,7 +29,7 @@ readConfig(params.config, GlobalConfig)
                     Logger.info('Token:', token);
                 });
         } else {
-            return Promise.all(config.config.map((file) => service.get(file)))
+            return Promise.all(config.config.map((file) => service.get(file, params.project)))
         }
     })
     .catch((err) => {

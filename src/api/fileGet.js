@@ -37,12 +37,9 @@ export default class FileGet {
         this.logger = getLogger(`${config.hostname}`);
     }
 
-    get(file) {
+    get(file, path) {
         const url = '/api/config';
-        const params = {
-            file,
-            path: path.basename(process.cwd()),
-        }
+        const params = { file, path };
         this.logger.info('GET', url, params);
         return this.instance.get(url, { params })
             .then((response) => writeArray(file, [response.data]));
