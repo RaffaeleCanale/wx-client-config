@@ -1,6 +1,7 @@
 import Joi from 'joi';
 import _ from 'lodash';
 import { readJson } from 'js-utils/file-utils';
+import Logger from 'js-utils/logger';
 
 const configItem = Joi.alternatives().try(
     Joi.string(),
@@ -28,9 +29,13 @@ function sanitizeConfigItem(project, item) {
 
 export function readConfig(filename, defaults, project) {
     return readJson(filename)
+        .catch((err) => {
+            Logger.warn(`Failed to read config ${filename}, using default values`, err);
+            return {};
+        })
         .then(config => Joi.validate(_.defaults(config, defaults), schema))
         .then((config) => {
-            config.config = config.config.map(sanitizeConfigItem.bind(null, project));
+            config.config = _.map(config.config, sanitizeConfigItem.bind(null, project));
             return config;
         });
 }

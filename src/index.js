@@ -14,7 +14,6 @@ const argsSchema = Joi.object().keys({
     token: Joi.array().items(Joi.string()).optional(),
 }).unknown();
 
-
 const result = Joi.validate(argv, argsSchema)
 if (result.error !== null) {
     throw Error(result.error);

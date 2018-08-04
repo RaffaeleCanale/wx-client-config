@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import axios from 'axios';
-import path from 'path';
 import bcrypt from 'bcrypt';
 import read from 'read';
 import { writeArray } from 'js-utils/file-utils'
