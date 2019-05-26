@@ -1,1 +1,8 @@
-{}
+{
+    "config": [
+        "test.json",
+        {
+            "file": "test2.txt"
+        }
+    ]
+}

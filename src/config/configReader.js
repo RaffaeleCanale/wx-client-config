@@ -9,6 +9,8 @@ const configItem = Joi.alternatives().try(
         file: Joi.string().required(),
         project: Joi.string().optional(),
         output: Joi.string().optional(),
+        version: Joi.number().optional(),
+        domain: Joi.string().optional(),
     })
 );
 

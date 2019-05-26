@@ -2,6 +2,7 @@ import _ from 'lodash';
 import axios from 'axios';
 import bcrypt from 'bcrypt';
 import read from 'read';
+import fs from 'fs';
 import { writeArray } from 'js-utils/file-utils'
 import { getLogger } from 'js-utils/logger';
 
@@ -37,12 +38,36 @@ export default class FileGet {
     }
 
     get(item) {
-        const { file, project, output } = item;
+        const { file, project, output, version, domain } = item;
         const url = '/api/config';
         const params = { file, path: project };
+        if (version !== undefined) {
+            params.version = version;
+        }
+        if (domain !== undefined) {
+            params.domain = domain;
+        }
         this.logger.info('GET', url, params);
         return this.instance.get(url, { params })
-            .then((response) => writeArray(output, [response.data]));
+            .then(({ data }) => {
+                const response = JSON.parse(data);
+                fs.writeFileSync(output, response.content);
+            });
+    }
+
+    push(item, domainOverride) {
+        const { file, project, output, domain } = item;
+        const url = '/api/config';
+        const data = {
+            file,
+            path: project,
+            domain: domain || domainOverride,
+            content: fs.readFileSync(output, 'utf8'),
+        };
+
+        this.logger.info('POST', url);
+        return this.instance.post(url, data)
+            .then(response => JSON.parse(response.data));
     }
 
     requestToken(domains) {
@@ -56,6 +81,18 @@ export default class FileGet {
                 this.logger.info('POST', url, data);
                 return this.instance.post(url, data).then(response => JSON.parse(response.data));
             });
+    }
+
+    getVersions(item) {
+        const { file, project, domain } = item;
+        const url = '/api/config/versions';
+        const params = { file, path: project };
+        if (domain !== undefined) {
+            params[domain] = domain;
+        }
+        this.logger.info('GET', url, params);
+        return this.instance.get(url, { params })
+            .then(({ data }) => JSON.parse(data));
     }
 
 }
