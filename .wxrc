@@ -1,6 +1,9 @@
 {
     "config": [
-        "test.json",
+        {
+            "file": "test.json",
+            "encrypted": true
+        },
         {
             "file": "test2.txt"
         }

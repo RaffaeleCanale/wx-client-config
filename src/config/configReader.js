@@ -11,6 +11,7 @@ const configItem = Joi.alternatives().try(
         output: Joi.string().optional(),
         version: Joi.number().optional(),
         domain: Joi.string().optional(),
+        encrypted: Joi.boolean().default(false),
     })
 );
 

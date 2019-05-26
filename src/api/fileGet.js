@@ -5,6 +5,7 @@ import read from 'read';
 import fs from 'fs';
 import { writeArray } from 'js-utils/file-utils'
 import { getLogger } from 'js-utils/logger';
+import CryptoJS from 'crypto-js';
 
 function getHeaders(config) {
     const headers = {};
@@ -16,13 +17,33 @@ function getHeaders(config) {
     return headers;
 }
 
-function inputPassword() {
+function inputPassword(message = 'Input password: ') {
     return new Promise((resolve, reject) => {
-        read({ prompt: 'Input password: ', silent: true }, (err, password) => {
+        read({ prompt: message, silent: true }, (err, password) => {
             if (err) return reject(err);
             return resolve(password);
         });
     });
+}
+
+function getContent(output, encrypted) {
+    let content = fs.readFileSync(output, 'utf8');
+    if (!encrypted) {
+        return Promise.resolve(content);
+    }
+
+    return inputPassword(`Input password for ${output}: `)
+        .then(password => { console.log('password', password); return password; })
+        .then(password => CryptoJS.AES.encrypt(content, password).toString());
+}
+
+function getOutputContent(response, encrypted, file) {
+    if (encrypted) {
+        return inputPassword(`Input password for ${file}: `)
+            .then(password => { console.log('password', password); return password; })
+            .then(password => CryptoJS.AES.decrypt(response, password).toString(CryptoJS.enc.Utf8));
+    }
+    return Promise.resolve(response);
 }
 
 export default class FileGet {
@@ -38,7 +59,7 @@ export default class FileGet {
     }
 
     get(item) {
-        const { file, project, output, version, domain } = item;
+        const { file, project, output, version, domain, encrypted } = item;
         const url = '/api/config';
         const params = { file, path: project };
         if (version !== undefined) {
@@ -51,22 +72,28 @@ export default class FileGet {
         return this.instance.get(url, { params })
             .then(({ data }) => {
                 const response = JSON.parse(data);
-                fs.writeFileSync(output, response.content);
-            });
+                return getOutputContent(response.content, encrypted, file);
+            })
+            .then(content => fs.writeFileSync(output, content));
     }
 
     push(item, domainOverride) {
-        const { file, project, output, domain } = item;
+        const { file, project, output, domain, encrypted } = item;
         const url = '/api/config';
-        const data = {
-            file,
-            path: project,
-            domain: domain || domainOverride,
-            content: fs.readFileSync(output, 'utf8'),
-        };
 
-        this.logger.info('POST', url);
-        return this.instance.post(url, data)
+
+        return getContent(output, encrypted)
+            .then((content) => {
+                const data = {
+                    file,
+                    path: project,
+                    domain: domain || domainOverride,
+                    content,
+                };
+
+                this.logger.info('POST', url);
+                return this.instance.post(url, data);
+            })
             .then(response => JSON.parse(response.data));
     }
 
