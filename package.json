@@ -4,7 +4,7 @@
     "description": "Client that fetches config file(s) for a given project",
     "repository": "github:RaffaeleCanale/wx-client-config",
     "license": "MIT",
-    "main": "index.js",
+    "main": "dist/index.js",
     "scripts": {
         "dev": "tsc-watch --onSuccess \"node ./dist/index.js --config .wxrc.test\"",
         "build": "tsc",

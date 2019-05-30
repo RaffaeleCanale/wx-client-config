@@ -1,0 +1,33 @@
+__wx-client-config()
+{
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+    options="--domain --version --encrypted --project"
+    modes="push pull versions generate-token"
+
+    case "$prev" in
+        "--encrypted" )
+            COMPREPLY=( $(compgen -W "true false" -- ${cur}) )
+            ;;
+        "wx-client-config" )
+            if [[ "$cur" == -* ]]; then
+                COMPREPLY=( $(compgen -W "${options}" -- ${cur}) )
+            else
+                COMPREPLY=( $(compgen -W "${modes}" -- ${cur}) )
+            fi
+            ;;
+        # "push"|"pull" )
+            # keys="`cat "__ROOT__/../.wxrc" | jq -r '. | to_entries[] | .key'`"
+            # COMPREPLY=( $(compgen -W "$keys" -- ${cur}) )
+            # ;;
+        # * )
+        #     if [[ "$cur" == -* ]]; then
+        #         COMPREPLY=( $(compgen -W "--target" -- ${cur}) )
+        #     fi
+        #     ;;
+    esac
+}
+
+complete -F __wx-client-config wx-client-config
