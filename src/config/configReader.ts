@@ -80,7 +80,7 @@ function sanitizeConfigItem(configFile: any, overrideOptions: ConfigFileOptions,
 
     const prioritezed = _.assign({
         version: undefined,
-        encrytped: false,
+        encrypted: false,
     }, configFile, configFileItem, overrideOptions);
 
     checkMandatoryProperties(prioritezed, 'project', 'encrypted');
