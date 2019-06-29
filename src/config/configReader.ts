@@ -1,5 +1,6 @@
 import Joi from 'joi';
 import _ from 'lodash';
+import path from 'path';
 // @ts-ignore
 import { readJson } from 'js-utils/file-utils';
 // @ts-ignore
@@ -81,6 +82,7 @@ function sanitizeConfigItem(configFile: any, overrideOptions: ConfigFileOptions,
     const prioritezed = _.assign({
         version: undefined,
         encrypted: false,
+        project: path.basename(process.cwd()),
     }, configFile, configFileItem, overrideOptions);
 
     checkMandatoryProperties(prioritezed, 'project', 'encrypted');

@@ -8,7 +8,7 @@ import FileGet from './api/fileGet';
 
 
 const argsSchema = Joi.object().keys({
-    project: Joi.string().default(path.basename(process.cwd())),
+    project: Joi.string().optional(),
     config: Joi.string().default('.wxrc'),
     domains: Joi.string().optional(),
     domain: Joi.string().optional(),
