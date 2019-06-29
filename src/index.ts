@@ -22,12 +22,14 @@ async function main(argv: any): Promise<any> {
     const args = await Joi.validate(argv, argsSchema);
     let mode = args._[0] || 'pull';
 
-    let config
+    let config;
     if (mode === 'bootstrap') {
         config = await createConfig({
             config: [ '.wxrc' ],
         }, args);
         mode = 'pull';
+    } else if (mode === 'generate-token') {
+        config = await createConfig({}, args);
     } else {
         config = await readConfig(args.config, args);
     }
