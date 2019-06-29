@@ -99,6 +99,10 @@ function sanitizeConfigItem(configFile: any, overrideOptions: ConfigFileOptions,
 
 export default async function readConfig(filename: string, overrideOptions: ConfigFileOptions): Promise<Config> {
     let json = await readJson(filename);
+    return createConfig(json, overrideOptions);
+}
+
+export async function createConfig(json: any, overrideOptions: ConfigFileOptions): Promise<Config> {
     json = _.defaultsDeep(json, GlobalConfig);
 
     const configFile = await Joi.validate(json, schema);

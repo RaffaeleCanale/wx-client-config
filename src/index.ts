@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import yargs from 'yargs';
 import path from 'path';
-import readConfig, { ConfigFileOptions, Config } from './config/configReader';
+import readConfig, { ConfigFileOptions, Config, createConfig } from './config/configReader';
 import FileGet from './api/fileGet';
 // import GlobalConfig from 'globalConfig';
 // import Logger from 'js-utils/logger';
@@ -20,9 +20,18 @@ const argv = yargs.version(false).argv;
 
 async function main(argv: any): Promise<any> {
     const args = await Joi.validate(argv, argsSchema);
-    const mode = args._[0] || 'pull';
+    let mode = args._[0] || 'pull';
 
-    const config = await readConfig(args.config, args);
+    let config
+    if (mode === 'bootstrap') {
+        config = await createConfig({
+            config: [ '.wxrc' ],
+        }, args);
+        mode = 'pull';
+    } else {
+        config = await readConfig(args.config, args);
+    }
+
     const service = new FileGet(config);
 
 

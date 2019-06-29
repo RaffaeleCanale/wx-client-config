@@ -5,7 +5,7 @@ __wx-client-config()
     prev="${COMP_WORDS[COMP_CWORD-1]}"
 
     options="--domain --version --encrypted --project"
-    modes="push pull versions generate-token"
+    modes="push pull versions generate-token bootstrap"
 
     case "$prev" in
         "--encrypted" )
