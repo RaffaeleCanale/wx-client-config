@@ -28,6 +28,7 @@ export interface Config {
     hostname: string,
     token: string,
     timeout: number,
+    basicAuth?: string,
 
     files: ConfigFile[],
 }
@@ -37,6 +38,7 @@ const schema = Joi.object().keys({
     hostname: Joi.string().required(),
     token: Joi.string().optional(),
     timeout: Joi.number().default(10000),
+    basicAuth: Joi.string().optional(),
 
     project: Joi.string().optional(),
     version: Joi.number().optional(),
@@ -111,6 +113,7 @@ export async function createConfig(json: any, overrideOptions: ConfigFileOptions
     return {
         hostname: configFile.hostname,
         token: configFile.token,
+        basicAuth: configFile.basicAuth,
         timeout: configFile.timeout,
         files: configFile.config.map(sanitize),
     }

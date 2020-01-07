@@ -15,8 +15,9 @@ import { Config, ConfigFile } from '../config/configReader';
 function getHeaders(config: Config): any {
     const headers: any = {};
 
-    if (config.token) {
-        headers['Authorization'] = `Bearer ${config.token}`;
+    headers['X-WX-Authorization'] = `Bearer ${config.token}`;
+    if (config.basicAuth) {
+        headers['Authorization'] = `Basic ${Buffer.from(config.basicAuth).toString('base64')}`;
     }
 
     return headers;
