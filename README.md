@@ -2,44 +2,32 @@
 Client that allows to download config files from [wx-service-config](https://github.com/RaffaeleCanale/wx-service-config).
 
 ## Installation
+1. Create the config file at `./config.json` with the following properties:
+    - `hostname` - the service hostname
+    - `basicAuth` - if needed, the basic auth credentials (eg. "user:password")
+2. Install the project
 ```sh
 wx install
 ```
+3. Request a new access token
+```sh
+wx-client-config generate-token <domain1> <domain2> ...
+```
+The domains could be, for example, "work all"
+
+4. Get the provied token and add it to the `./config.json` under `token`
+
+###
 
 ## Usage
-
-### Request a new access token
-```sh
-wx-client-config --token <domain1> <domain2> ...
+### Pull files
+In a project with a `.wxrc` file:
 ```
-| Options | Description |
-| :-------------: |:-------------|
-| `--token` | Array of domains that the token will allow access to |
-This will print out a new access key. That key can be included to the project configuration or in the global configuration (ie. `./config.json`).
-
-You will be prompted for the service password.
-
-### Download configuration files
-```sh
-wx-client-config
+wx-client-config --config <config-file> --project <project name> --domain <domain>
 ```
-| Options | Description |
-| :-------------: |:-------------|
-| `--config` | Name of the config file to load (default: `.wxrc`) |
-| `--project` | Name of the project (default: current directory name) |
 
-The configuration file should contain the following properties:
-```json
-{
-    "hostname": "<address of the config service>",
-    "token": "<access jwt>",
-    "config": [
-        "<config filename 1>",
-        "<config filename 2>",
-        "..."
-    ]
-}
-```
-This will download all the files in `config` to the current directory.
-
-Note that any missing property can fallback on the global configuration file located at `./config.json`. This can be useful to avoid specifying the `hostname` and `token` on each project config.
+| Option | Default | Description |
+| :-------------:|:-------------|:-------------|
+| `--config` | `.wxrc` | Name of the config file to load (default: `.wxrc`) |
+| `--project` | currend directory name | Name of the project |
+| `--domain` | first match found | Name of the domain to use |

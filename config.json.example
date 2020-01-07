@@ -1,4 +1,4 @@
 {
-    "environment": "",
-    "hostname": ""
+    "hostname": "",
+    "basicAuth": null
 }
