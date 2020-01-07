@@ -77,5 +77,5 @@ function getAllVersions(service: FileGet, config: Config): Promise<any> {
         })
     );
 
-    return Promise.all(promises).then(() => console.log(JSON.stringify(result, null, 4)));
+    return Promise.all(promises).then(() => JSON.stringify(result, null, 4));
 }
